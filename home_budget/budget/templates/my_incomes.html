@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
+        <p><a href="{% url 'income-delete-view' pk=income.pk %}"> Delete income: {{ income }} </a></p>
+        <p><a href="{% url 'income-update-view' pk=income.pk %}"> Update income: {{ income }} </a></p>
+{% endblock %}

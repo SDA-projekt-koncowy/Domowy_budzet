@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        Do you really want to delete this object?
+        <input type="submit" value="Delete">
+    </form>
+{% endblock %}
