@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from budget.views import IncomeCreateView, IncomeDeleteView, IncomeDetailView, IncomeListView, IncomeUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('income-list-view/', IncomeListView.as_view(), name="income-list-view"),
+    path('income-create-view/', IncomeCreateView.as_view(), name="income-create-view"),
+    path('income-update-view/<pk>/', IncomeUpdateView.as_view(), name="income-update-view"),
+    path('income-delete-view/<pk>/', IncomeDeleteView.as_view(), name="income-delete-view"),
+    path('income-detail-view/<pk>/', IncomeDetailView.as_view(), name="income-detail-view")
 ]
+
