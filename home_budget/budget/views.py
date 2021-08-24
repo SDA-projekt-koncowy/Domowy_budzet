@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views import View
 
 from django.views.generic import (
     CreateView,
@@ -13,11 +14,19 @@ from budget.forms import IncomeForm
 from budget.models import Income
 
 
-def index(request):
-    return render(
-        request,
-        template_name="index.html"
-    )
+class IndexView(View):
+
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return render(
+                request,
+                template_name="register_page.html"
+            )
+
+        return render(
+            request,
+            template_name="index.html"
+        )
 
 
 
