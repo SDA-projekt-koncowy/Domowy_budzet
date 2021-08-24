@@ -14,6 +14,13 @@ from budget.forms import IncomeForm
 from budget.models import Income
 
 
+def copyright(request):
+    return render(
+        request,
+        template_name="copyright.html"
+    )
+
+
 class IndexView(View):
 
     def get(self, request):
@@ -27,7 +34,6 @@ class IndexView(View):
             request,
             template_name="index.html"
         )
-
 
 
 class IncomeListView(ListView):

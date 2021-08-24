@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html {% if LANGUAGE_CODE %}lang="{{ LANGUAGE_CODE }}"{% endif %}>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Copyright</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container fixed">
+        <h1>
+          Copyright by:
+        </h1>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="jumbotron">
+        <h3>Karolina Krawczak-Lloret</h3>
+        <h5>karolina.krawczak@gmail.com</h5>
+        <h3>Stanisław Raczkiewicz</h3>
+        <h5>raczkiewicz.stas@gmail.com</h5>
+        <h3>Arkadiusz Mezglewski</h3>
+        <h5>a.mezglewski@gmail.com</h5>
+        <h3>Tomasz Łupiński</h3>
+        <h5>tomasz.lupinski87@gmail.com</h5>
+        <h3>Jan Żeleźny</h3>
+        <h5>janzelezny11@gmail.com</h5>
+        <div class="container fixed text-center">
+          <button onclick="goBack()">Go Back</button>
+        </div>
+      </div>
+    </div>
+    <footer class="bg-light text-center text-lg-start">
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    © 2021 Copyright:
+    <a class="text-dark" href="{% url 'copyright' %}">SDA ZDPYTpol29 group2.</a>
+  </div>
+  </footer>
+
+  <script>
+function goBack() {
+  window.history.back();
+}
+</script>
+  </body>
+</html>
