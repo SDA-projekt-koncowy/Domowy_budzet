@@ -12,23 +12,23 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container fixed">
-        <div>
-        <a class="navbar-brand" href="/">Home</a>
-        </div>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             <li>
-            <a class="nav-item nav-link active" href="{% url 'income-create-view' %}">
+              <a class="nav-item nav-link" data-toggle="popover" href="/">Home</a>
+            </li>
+            <li>
+            <a class="nav-item nav-link" data-toggle="popover" href="{% url 'income-create-view' %}">
               Income
             </a>
             </li>
             <li>
-            <a class="nav-item nav-link active" href="/">
+            <a class="nav-item nav-link" href="/">
               Expenses
             </a>
             </li>
             <li>
-            <a class="nav-item nav-link active" href="/">
+            <a class="nav-item nav-link" href="/">
               Budget balance
             </a>
             </li>
