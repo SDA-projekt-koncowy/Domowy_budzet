@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
+
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -12,7 +13,13 @@ from budget.forms import IncomeForm
 from budget.models import Income
 
 
-# Create your views here.
+def index(request):
+    return render(
+        request,
+        template_name="index.html"
+    )
+
+
 
 class IncomeListView(ListView):
     template_name = "list.html"
