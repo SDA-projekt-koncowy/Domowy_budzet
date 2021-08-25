@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 # Create your models here.
@@ -8,8 +9,6 @@ class Category(models.Model):
 
     def __str__(self):
         return f"{self.income_category}"
-
-
 
 
 class Expense(models.Model):
@@ -22,9 +21,8 @@ class Expense(models.Model):
 class Income(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.CharField(max_length=128)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(default=timezone.now())
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.amount} - {self.category}"
-
