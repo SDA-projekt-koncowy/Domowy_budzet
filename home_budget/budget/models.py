@@ -17,6 +17,9 @@ class Expense(models.Model):
     date = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.amount} - {self.category}"
+
 
 class Income(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
