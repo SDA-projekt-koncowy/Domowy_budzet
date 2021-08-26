@@ -12,23 +12,23 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container fixed">
+        <div>
+        <a class="navbar-brand" href="/">Home</a>
+        </div>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             <li>
-              <a class="nav-item nav-link" data-toggle="popover" href="/">Home</a>
-            </li>
-            <li>
-            <a class="nav-item nav-link" data-toggle="popover" href="{% url 'income-create-view' %}">
+            <a class="nav-item nav-link active" href="{% url 'income-create-view' %}">
               Income
             </a>
             </li>
             <li>
-            <a class="nav-item nav-link" href="/">
+            <a class="nav-item nav-link active" href="{% url 'expense-list-view' %}">
               Expenses
             </a>
             </li>
             <li>
-            <a class="nav-item nav-link" href="/">
+            <a class="nav-item nav-link active" href="/">
               Budget balance
             </a>
             </li>
@@ -39,7 +39,6 @@
               </a>
                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/" target="_blank">About..</a>
-                <a class="dropdown-item" href="{% url 'category' %}">Category</a>
                 <a class="dropdown-item" href="/">Settings</a>
                 <div class="dropdown-divider"></div>
                  <a class="dropdown-item" href="/">Logout!</a>

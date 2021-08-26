@@ -19,11 +19,6 @@ from budget.views import IncomeCreateView, IncomeDeleteView, IncomeDetailView, I
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('income-list-view/', IncomeListView.as_view(), name="income-list-view"),
-    path('income-create-view/', IncomeCreateView.as_view(), name="income-create-view"),
-    path('income-update-view/<pk>/', IncomeUpdateView.as_view(), name="income-update-view"),
-    path('income-delete-view/<pk>/', IncomeDeleteView.as_view(), name="income-delete-view"),
-    path('income-detail-view/<pk>/', IncomeDetailView.as_view(), name="income-detail-view"),
-    path('', include('budget.urls')),
+    path('', include('budget.urls'))
 ]
 

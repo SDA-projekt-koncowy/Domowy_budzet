@@ -12,6 +12,7 @@ from django.views.generic import (
 )
 from budget.forms import IncomeForm
 from budget.models import Income
+from budget.models import Expense
 
 
 def copyright(request):
@@ -73,6 +74,40 @@ class IncomeDeleteView(DeleteView):
 class IncomeDetailView(DetailView):
     model = Income
     template_name = "my_incomes.html"
+    extra_context = {
+        "update_url": "income-update-view",
+        "delete_url": "income-delete-view"
+    }
+
+
+class ExpenseListView(ListView):
+    template_name = "list.html"
+    model = Expense
+
+
+class ExpenseCreateView(CreateView):
+    model = Expense
+    template_name = "form.html"
+    success_url = reverse_lazy("expense-list-view")
+    form_class = IncomeForm
+
+
+class ExpenseUpdateView(UpdateView):
+    model = Expense
+    fields = "__all__"
+    template_name = "form.html"
+    success_url = reverse_lazy("expense-list-view")
+
+
+class ExpenseDeleteView(DeleteView):
+    model = Expense
+    template_name = 'delete.html'
+    success_url = reverse_lazy("expense-list-view")
+
+
+class ExpenseDetailView(DetailView):
+    model = Expense
+    template_name = "my_expenses.html"
     extra_context = {
         "update_url": "income-update-view",
         "delete_url": "income-delete-view"
