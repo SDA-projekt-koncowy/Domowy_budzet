@@ -22,6 +22,15 @@ def copyright(request):
     )
 
 
+class CategoryView(View):
+
+    def get(self, request):
+        return render(
+            request,
+            template_name="category.html"
+        )
+
+
 class IndexView(View):
 
     def get(self, request):
