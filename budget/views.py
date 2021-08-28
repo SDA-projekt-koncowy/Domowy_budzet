@@ -47,7 +47,7 @@ class IndexView(View):
 
 
 class IncomeListView(ListView):
-    template_name = "list.html"
+    template_name = "income_list.html"
     model = Income
 
 
@@ -81,7 +81,7 @@ class IncomeDetailView(DetailView):
 
 
 class ExpenseListView(ListView):
-    template_name = "list.html"
+    template_name = "income_list.html"
     model = Expense
 
 

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+    {% for obj in object_list %}
+        <li> {{ obj }}
+            <a href="{% url 'income-update-view' pk=obj.pk %}">  UPDATE </a>
+            <a href="{% url 'income-delete-view' pk=obj.pk %}">  DELETE </a>
+        </li>
+    {% endfor %}
+<p></p>
+        <a href="{% url 'income-create-view' %}"> ADD </a>
+{% endblock %}

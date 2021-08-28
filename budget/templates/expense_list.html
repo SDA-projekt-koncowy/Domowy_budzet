@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+    {% for obj in object_list %}
+        <li> {{ obj }}
+            <a href="{% url 'expense-update-view' pk=obj.pk %}">  UPDATE </a>
+            <a href="{% url 'expense-delete-view' pk=obj.pk %}">  DELETE </a>
+        </li>
+    {% endfor %}
+        <a href="{% url 'expense-create-view' %}">
+            <button class="btn">
+                ADD
+            </button>
+        </a>
+{% endblock %}
