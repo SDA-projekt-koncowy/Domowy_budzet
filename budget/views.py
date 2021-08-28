@@ -11,7 +11,7 @@ from django.views.generic import (
     ListView,
     UpdateView
 )
-from budget.forms import IncomeForm
+from budget.forms import ExpenseForm, IncomeForm
 from budget.models import Income
 from budget.models import Expense
 
@@ -48,7 +48,7 @@ class IndexView(View):
 
 
 class IncomeListView(LoginRequiredMixin, ListView):
-    template_name = "list.html"
+    template_name = "income_list.html"
     model = Income
 
 
@@ -75,14 +75,10 @@ class IncomeDeleteView(LoginRequiredMixin, DeleteView):
 class IncomeDetailView(LoginRequiredMixin, DetailView):
     model = Income
     template_name = "my_incomes.html"
-    extra_context = {
-        "update_url": "income-update-view",
-        "delete_url": "income-delete-view"
-    }
 
 
 class ExpenseListView(LoginRequiredMixin, ListView):
-    template_name = "list.html"
+    template_name = "expense_list.html"
     model = Expense
 
 
@@ -90,7 +86,7 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
     model = Expense
     template_name = "form.html"
     success_url = reverse_lazy("expense-list-view")
-    form_class = IncomeForm
+    form_class = ExpenseForm
 
 
 class ExpenseUpdateView(LoginRequiredMixin, UpdateView):

@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-        <p><a href="{% url 'income-delete-view' pk=income.pk %}"> Delete income: {{ income }} </a></p>
-        <p><a href="{% url 'income-update-view' pk=income.pk %}"> Update income: {{ income }} </a></p>
+<p>Amount: {{ income.amount }}</p>
+<p>Category: {{income.category }}</p>
+<p>Date: {{ income.date }}</p>
+<p>Description: {{ income.description }}</p>
+<a class="btn btn-secondary" href="{% url 'income-list-view' %}"> GO BACK TO THE INCOME LIST </a>
 {% endblock %}
