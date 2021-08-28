@@ -1,14 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
     {% for obj in object_list %}
-        <li> {{ obj }}
-            <a href="{% url 'expense-update-view' pk=obj.pk %}">  UPDATE </a>
-            <a href="{% url 'expense-delete-view' pk=obj.pk %}">  DELETE </a>
+        <li> <a  href="{% url 'expense-detail-view' pk=obj.pk %}"> {{obj}} </a>
+            <a class="btn btn-info" href="{% url 'expense-update-view' pk=obj.pk %}">  UPDATE </a>
+            <a class="btn btn-danger" href="{% url 'expense-delete-view' pk=obj.pk %}">  DELETE </a>
         </li>
     {% endfor %}
-        <a href="{% url 'expense-create-view' %}">
-            <button class="btn">
-                ADD
-            </button>
-        </a>
+<p></p>
+        <a class="btn btn-success" href="{% url 'expense-create-view' %}"> ADD </a>
 {% endblock %}

@@ -10,7 +10,7 @@ from django.views.generic import (
     ListView,
     UpdateView
 )
-from budget.forms import IncomeForm
+from budget.forms import ExpenseForm, IncomeForm
 from budget.models import Income
 from budget.models import Expense
 
@@ -74,14 +74,10 @@ class IncomeDeleteView(DeleteView):
 class IncomeDetailView(DetailView):
     model = Income
     template_name = "my_incomes.html"
-    extra_context = {
-        "update_url": "income-update-view",
-        "delete_url": "income-delete-view"
-    }
 
 
 class ExpenseListView(ListView):
-    template_name = "income_list.html"
+    template_name = "expense_list.html"
     model = Expense
 
 
@@ -89,7 +85,7 @@ class ExpenseCreateView(CreateView):
     model = Expense
     template_name = "form.html"
     success_url = reverse_lazy("expense-list-view")
-    form_class = IncomeForm
+    form_class = ExpenseForm
 
 
 class ExpenseUpdateView(UpdateView):
