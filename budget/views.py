@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -46,62 +47,62 @@ class IndexView(View):
         )
 
 
-class IncomeListView(ListView):
+class IncomeListView(LoginRequiredMixin, ListView):
     template_name = "income_list.html"
     model = Income
 
 
-class IncomeCreateView(CreateView):
+class IncomeCreateView(LoginRequiredMixin, CreateView):
     model = Income
     template_name = "form.html"
     success_url = reverse_lazy("income-list-view")
     form_class = IncomeForm
 
 
-class IncomeUpdateView(UpdateView):
+class IncomeUpdateView(LoginRequiredMixin, UpdateView):
     model = Income
     fields = "__all__"
     template_name = "form.html"
     success_url = reverse_lazy("income-list-view")
 
 
-class IncomeDeleteView(DeleteView):
+class IncomeDeleteView(LoginRequiredMixin, DeleteView):
     model = Income
     template_name = 'delete.html'
     success_url = reverse_lazy("income-list-view")
 
 
-class IncomeDetailView(DetailView):
+class IncomeDetailView(LoginRequiredMixin, DetailView):
     model = Income
     template_name = "my_incomes.html"
 
 
-class ExpenseListView(ListView):
+class ExpenseListView(LoginRequiredMixin, ListView):
     template_name = "expense_list.html"
     model = Expense
 
 
-class ExpenseCreateView(CreateView):
+class ExpenseCreateView(LoginRequiredMixin, CreateView):
     model = Expense
     template_name = "form.html"
     success_url = reverse_lazy("expense-list-view")
     form_class = ExpenseForm
 
 
-class ExpenseUpdateView(UpdateView):
+class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
     model = Expense
     fields = "__all__"
     template_name = "form.html"
     success_url = reverse_lazy("expense-list-view")
 
 
-class ExpenseDeleteView(DeleteView):
+class ExpenseDeleteView(LoginRequiredMixin, DeleteView):
     model = Expense
     template_name = 'delete.html'
     success_url = reverse_lazy("expense-list-view")
 
 
-class ExpenseDetailView(DetailView):
+class ExpenseDetailView(LoginRequiredMixin, DetailView):
     model = Expense
     template_name = "my_expenses.html"
     extra_context = {

@@ -19,6 +19,7 @@ from budget.views import IncomeCreateView, IncomeDeleteView, IncomeDetailView, I
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('budget.urls'))
+    path('', include('budget.urls')),
+    path('accounts/', include('accounts.urls')),
 ]
 
