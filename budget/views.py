@@ -67,15 +67,19 @@ class IncomeCreateView(LoginRequiredMixin, CreateView):
 
 class IncomeUpdateView(LoginRequiredMixin, UpdateView):
     model = Income
-    fields = "__all__"
     template_name = "form.html"
     success_url = reverse_lazy("income-list-view")
+    form_class = IncomeForm
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.user == context['income'].user:
             return super().render_to_response(context)
         else:
             return HttpResponse('404')
+    
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class IncomeDeleteView(LoginRequiredMixin, DeleteView):
@@ -122,15 +126,19 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
 
 class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
     model = Expense
-    fields = "__all__"
     template_name = "form.html"
     success_url = reverse_lazy("expense-list-view")
+    form_class = ExpenseForm
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.user == context['expense'].user:
             return super().render_to_response(context)
         else:
             return HttpResponse('404')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class ExpenseDeleteView(LoginRequiredMixin, DeleteView):
@@ -177,15 +185,19 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
 
 class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     model = Category
-    fields = "__all__"
     template_name = "form.html"
     success_url = reverse_lazy("category-list-view")
+    form_class = CategoryForm
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.user == context['category'].user:
             return super().render_to_response(context)
         else:
             return HttpResponse('404')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class CategoryDeleteView(LoginRequiredMixin, DeleteView):
