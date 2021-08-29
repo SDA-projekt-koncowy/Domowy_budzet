@@ -50,6 +50,9 @@ class IncomeListView(LoginRequiredMixin, ListView):
     template_name = "income_list.html"
     model = Income
 
+    def get_queryset(self):
+        return Income.objects.filter(user=self.request.user)
+
 
 class IncomeCreateView(LoginRequiredMixin, CreateView):
     model = Income
@@ -83,6 +86,9 @@ class IncomeDetailView(LoginRequiredMixin, DetailView):
 class ExpenseListView(LoginRequiredMixin, ListView):
     template_name = "expense_list.html"
     model = Expense
+
+    def get_queryset(self):
+        return Expense.objects.filter(user=self.request.user)
 
 
 class ExpenseCreateView(LoginRequiredMixin, CreateView):
