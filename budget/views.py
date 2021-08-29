@@ -79,6 +79,14 @@ class IncomeDetailView(LoginRequiredMixin, DetailView):
     model = Income
     template_name = "my_incomes.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user == context['income'].user:
+            return context
+        else:
+            context = {}
+            return context
+
 
 class ExpenseListView(LoginRequiredMixin, ListView):
     template_name = "expense_list.html"
@@ -112,7 +120,11 @@ class ExpenseDeleteView(LoginRequiredMixin, DeleteView):
 class ExpenseDetailView(LoginRequiredMixin, DetailView):
     model = Expense
     template_name = "my_expenses.html"
-    extra_context = {
-        "update_url": "income-update-view",
-        "delete_url": "income-delete-view"
-    }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user == context['expense'].user:
+            return context
+        else:
+            context = {}
+            return context
