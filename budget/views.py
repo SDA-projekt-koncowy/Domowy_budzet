@@ -161,7 +161,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
 
     def get_queryset(self):
-        return Expense.objects.filter(user=self.request.user)
+        return Category.objects.filter(user=self.request.user)
 
 
 class CategoryCreateView(LoginRequiredMixin, CreateView):
@@ -175,29 +175,29 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-# class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
-#     model = Expense
-#     fields = "__all__"
-#     template_name = "form.html"
-#     success_url = reverse_lazy("expense-list-view")
-#
-#     def render_to_response(self, context, **response_kwargs):
-#         if self.request.user == context['expense'].user:
-#             return super().render_to_response(context)
-#         else:
-#             return HttpResponse('404')
-#
-#
-# class ExpenseDeleteView(LoginRequiredMixin, DeleteView):
-#     model = Expense
-#     template_name = 'delete.html'
-#     success_url = reverse_lazy("expense-list-view")
-#
-#     def render_to_response(self, context, **response_kwargs):
-#         if self.request.user == context['expense'].user:
-#             return super().render_to_response(context)
-#         else:
-#             return HttpResponse('404')
+class CategoryUpdateView(LoginRequiredMixin, UpdateView):
+    model = Category
+    fields = "__all__"
+    template_name = "form.html"
+    success_url = reverse_lazy("category-list-view")
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.user == context['category'].user:
+            return super().render_to_response(context)
+        else:
+            return HttpResponse('404')
+
+
+class CategoryDeleteView(LoginRequiredMixin, DeleteView):
+    model = Category
+    template_name = 'delete.html'
+    success_url = reverse_lazy("category-list-view")
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.user == context['category'].user:
+            return super().render_to_response(context)
+        else:
+            return HttpResponse('404')
 
 
 class CategoryDetailView(LoginRequiredMixin, DetailView):
@@ -205,7 +205,7 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
     template_name = "my_category.html"
 
     def render_to_response(self, context, **response_kwargs):
-        if self.request.user == context['expense'].user:
+        if self.request.user == context['category'].user:
             return super().render_to_response(context)
         else:
             return HttpResponse('404')
