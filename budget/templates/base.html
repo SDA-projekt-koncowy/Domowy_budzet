@@ -32,26 +32,24 @@
               Budget balance
             </a>
             </li>
+            {% if not user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">LOGIN</a>
+              </li>
+            {% else %}
             <li class="nav-item text-right dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Awatar
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ user.get_username }}
               </a>
-               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/" target="_blank">About..</a>
                 <a class="dropdown-item" href="{% url 'category' %}">Settings</a>
-                <div class="dropdown-divider"></div>
-                 {% if user.is_authenticated %}
-                    <a class="dropdown-item" href="{% url 'logout' %}">
-                        LOGOUT
-                    </a>
-                 {% else %}
-                    <a class="dropdown-item" href="{% url 'login' %}">
-                        LOGIN
-                    </a>
-                 {% endif %}
+                <a class="dropdown-item" href="{% url 'category' %}">Category</a>
+                  <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'logout' %}">LOGOUT</a>
               </div>
-            </li>
+              {% endif %}
           </div>
           </div>
         </div>
