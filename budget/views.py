@@ -11,8 +11,8 @@ from django.views.generic import (
     ListView,
     UpdateView
 )
-from budget.forms import ExpenseForm, IncomeForm
-from budget.models import Category, Income, Expense
+from budget.forms import CategoryForm, ExpenseForm, IncomeForm
+from budget.models import Category, Expense, Income
 
 
 def copyright(request):
@@ -164,17 +164,17 @@ class CategoryListView(LoginRequiredMixin, ListView):
         return Expense.objects.filter(user=self.request.user)
 
 
-# class ExpenseCreateView(LoginRequiredMixin, CreateView):
-#     model = Expense
-#     template_name = "form.html"
-#     success_url = reverse_lazy("expense-list-view")
-#     form_class = ExpenseForm
-#
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         return super().form_valid(form)
-#
-#
+class CategoryCreateView(LoginRequiredMixin, CreateView):
+    model = Category
+    template_name = "form.html"
+    success_url = reverse_lazy("category-list-view")
+    form_class = CategoryForm
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
 # class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
 #     model = Expense
 #     fields = "__all__"
@@ -198,14 +198,14 @@ class CategoryListView(LoginRequiredMixin, ListView):
 #             return super().render_to_response(context)
 #         else:
 #             return HttpResponse('404')
-#
-#
-# class ExpenseDetailView(LoginRequiredMixin, DetailView):
-#     model = Expense
-#     template_name = "my_expenses.html"
-#
-#     def render_to_response(self, context, **response_kwargs):
-#         if self.request.user == context['expense'].user:
-#             return super().render_to_response(context)
-#         else:
-#             return HttpResponse('404')
+
+
+class CategoryDetailView(LoginRequiredMixin, DetailView):
+    model = Category
+    template_name = "my_category.html"
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.user == context['expense'].user:
+            return super().render_to_response(context)
+        else:
+            return HttpResponse('404')

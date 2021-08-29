@@ -31,3 +31,11 @@ class ExpenseForm(forms.ModelForm):
     class Meta:
         model = Expense
         fields = ("amount", "description", "category")
+
+
+class CategoryForm(forms.ModelForm):
+    name = forms.CharField(max_length=128, required=False)
+
+    class Meta:
+        model = Category
+        fields = ["name"]
