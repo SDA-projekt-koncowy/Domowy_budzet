@@ -12,8 +12,7 @@ from django.views.generic import (
     UpdateView
 )
 from budget.forms import ExpenseForm, IncomeForm
-from budget.models import Income
-from budget.models import Expense
+from budget.models import Income, Expense
 
 
 def copyright(request):
@@ -58,6 +57,10 @@ class IncomeCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("income-list-view")
     form_class = IncomeForm
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
 
 class IncomeUpdateView(LoginRequiredMixin, UpdateView):
     model = Income
@@ -87,6 +90,10 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
     template_name = "form.html"
     success_url = reverse_lazy("expense-list-view")
     form_class = ExpenseForm
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
