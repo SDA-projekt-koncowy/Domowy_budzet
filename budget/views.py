@@ -22,12 +22,12 @@ def copyright(request):
     )
 
 
-class CategoryView(View):
+class SettingsView(View):
 
     def get(self, request):
         return render(
             request,
-            template_name="category.html"
+            template_name="settings.html"
         )
 
 
