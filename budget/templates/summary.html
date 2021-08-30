@@ -2,16 +2,18 @@
 {% block content %}
     <div class="card mb-3">
         <div class="card-body">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover">
                 <thead class="thead-light">
                     <tr>
                         <th>Category</th>
                     </tr>
                 </thead>
                 <tbody>
+                {% for cat in categories %}
                     <tr>
-                        <th>Work</th>
+                        <th>{{ cat }}</th>
                     </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>

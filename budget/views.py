@@ -229,8 +229,14 @@ class Summary(LoginRequiredMixin, View):
 
     def get(self, request):
         user = User.objects.get(pk=request.user.id)
+        categories = Category.objects.all().filter(user=user)
 
+        context = {
+            'user': user,
+            'categories': categories,
+        }
         return render(
             request,
-            template_name="summary.html"
+            template_name="summary.html",
+            context=context,
         )
