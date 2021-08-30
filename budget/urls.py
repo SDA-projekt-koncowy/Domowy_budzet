@@ -16,4 +16,9 @@ urlpatterns = [
     path('income-detail-view/<pk>/', views.IncomeDetailView.as_view(), name="income-detail-view"),
     path('copyright/', views.copyright, name='copyright'),
     path('category/', views.CategoryView.as_view(), name='category'),
+    path('category-list-view/', views.CategoryListView.as_view(), name="category-list-view"),
+    path('category-create-view/', views.CategoryCreateView.as_view(), name="category-create-view"),
+    path('category-update-view/<pk>/', views.CategoryUpdateView.as_view(), name="category-update-view"),
+    path('category-delete-view/<pk>/', views.CategoryDeleteView.as_view(), name="category-delete-view"),
+    path('category-detail-view/<pk>/', views.CategoryDetailView.as_view(), name="category-detail-view"),
 ]

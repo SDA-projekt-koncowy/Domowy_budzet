@@ -11,8 +11,8 @@ from django.views.generic import (
     ListView,
     UpdateView
 )
-from budget.forms import ExpenseForm, IncomeForm
-from budget.models import Income, Expense
+from budget.forms import CategoryForm, ExpenseForm, IncomeForm
+from budget.models import Category, Expense, Income
 
 
 def copyright(request):
@@ -67,15 +67,19 @@ class IncomeCreateView(LoginRequiredMixin, CreateView):
 
 class IncomeUpdateView(LoginRequiredMixin, UpdateView):
     model = Income
-    fields = "__all__"
     template_name = "form.html"
     success_url = reverse_lazy("income-list-view")
+    form_class = IncomeForm
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.user == context['income'].user:
             return super().render_to_response(context)
         else:
             return HttpResponse('404')
+    
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class IncomeDeleteView(LoginRequiredMixin, DeleteView):
@@ -122,15 +126,19 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
 
 class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
     model = Expense
-    fields = "__all__"
     template_name = "form.html"
     success_url = reverse_lazy("expense-list-view")
+    form_class = ExpenseForm
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.user == context['expense'].user:
             return super().render_to_response(context)
         else:
             return HttpResponse('404')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class ExpenseDeleteView(LoginRequiredMixin, DeleteView):
@@ -151,6 +159,65 @@ class ExpenseDetailView(LoginRequiredMixin, DetailView):
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.user == context['expense'].user:
+            return super().render_to_response(context)
+        else:
+            return HttpResponse('404')
+
+
+class CategoryListView(LoginRequiredMixin, ListView):
+    template_name = "category_list.html"
+    model = Category
+
+    def get_queryset(self):
+        return Category.objects.filter(user=self.request.user)
+
+
+class CategoryCreateView(LoginRequiredMixin, CreateView):
+    model = Category
+    template_name = "form.html"
+    success_url = reverse_lazy("category-list-view")
+    form_class = CategoryForm
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+class CategoryUpdateView(LoginRequiredMixin, UpdateView):
+    model = Category
+    template_name = "form.html"
+    success_url = reverse_lazy("category-list-view")
+    form_class = CategoryForm
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.user == context['category'].user:
+            return super().render_to_response(context)
+        else:
+            return HttpResponse('404')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+class CategoryDeleteView(LoginRequiredMixin, DeleteView):
+    model = Category
+    template_name = 'delete.html'
+    success_url = reverse_lazy("category-list-view")
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.user == context['category'].user:
+            return super().render_to_response(context)
+        else:
+            return HttpResponse('404')
+
+
+class CategoryDetailView(LoginRequiredMixin, DetailView):
+    model = Category
+    template_name = "my_category.html"
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.user == context['category'].user:
             return super().render_to_response(context)
         else:
             return HttpResponse('404')
