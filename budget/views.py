@@ -221,3 +221,12 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
             return super().render_to_response(context)
         else:
             return HttpResponse('404')
+
+
+class Summary(LoginRequiredMixin, View):
+
+    def get(self, request):
+        return render(
+            request,
+            template_name="summary.html"
+        )
