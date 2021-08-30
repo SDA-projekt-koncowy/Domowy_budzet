@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
@@ -14,6 +15,7 @@ from django.views.generic import (
 from budget.forms import CategoryForm, ExpenseForm, IncomeForm
 from budget.models import Category, Expense, Income
 
+User = get_user_model()
 
 def copyright(request):
     return render(
@@ -226,6 +228,8 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
 class Summary(LoginRequiredMixin, View):
 
     def get(self, request):
+        user = User.objects.get(pk=request.user.id)
+
         return render(
             request,
             template_name="summary.html"
