@@ -184,6 +184,9 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
+    def get_queryset(self):
+        return Category.objects.filter(user=self.request.user)
+
 
 class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     model = Category
