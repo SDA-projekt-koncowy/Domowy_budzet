@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+INCOMES
+    <form method="GET">
+    {{ filter1.form }}
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    {% for income in filter1.qs %}
+        <li> {{ income }} </li>
+    {% endfor %}
+
+</div>
+<div class="container">
+EXPENSES
+    <form method="GET">
+    {{ filter2.form }}
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    {% for expense in filter2.qs %}
+        <li> {{ expense }} </li>
+    {% endfor %}
+
+</div>
+<p>INCOME_SUM {{ income_sum }}</p>
+<p>EXPENSE_SUM {{ expense_sum }}</p>
+{% endblock %}
