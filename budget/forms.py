@@ -35,7 +35,8 @@ class ExpenseForm(forms.ModelForm):
 
 class CategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=128, required=False)
+    category = forms.ChoiceField
 
     class Meta:
         model = Category
-        fields = ["name"]
+        fields = ["name", "category"]
