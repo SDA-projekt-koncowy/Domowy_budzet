@@ -3,12 +3,12 @@ from dateutil.relativedelta import relativedelta
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect, HttpResponse
+from django.db.models import Sum
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
-
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -16,6 +16,7 @@ from django.views.generic import (
     ListView,
     UpdateView
 )
+
 from budget.forms import CategoryForm, ExpenseForm, IncomeForm
 from budget.models import Category, Expense, Income
 
@@ -239,6 +240,14 @@ class Summary(LoginRequiredMixin, View):
         in_categories = Category.objects.all().filter(user=user, category='IN')
         ex_categories = Category.objects.all().filter(user=user, category='EX')
 
+        total_income_value = Income.objects.filter(
+            user=user,
+            date__year=2021,
+            date__month=9
+        ).aggregate(
+            amount_sum=(Sum('amount')
+            ))['amount_sum']
+
         dates = [
                     datetime(
                         timezone.now().year,
@@ -246,16 +255,69 @@ class Summary(LoginRequiredMixin, View):
                         1,
                     ).date() - relativedelta(
                         months=i
-                    ) for i in range(12)
+                    ) for i in range(6)
                 ][::-1]
 
+        in_result = []
 
+        for category in enumerate(in_categories):
+            in_result.append([])
+            for month in dates:
+                monthly_amount = Expense.objects.filter(
+                    user=request.user,
+                    category__name=category,
+                    date__year=month.year,
+                    date__month=month.month,
+                ).aggregate(
+                    amount_sum=Sum('amount'),
+                    )['amount_sum']
+                in_result.append(monthly_amount)
+
+        monthly_income = []
+
+        for month in dates:
+            income = Income.objects.all().filter(
+                user=user,
+                date__year=month.year,
+                date__month=month.month
+            ).aggregate(
+                amount_sum=(Sum('amount'))
+            )['amount_sum']
+            if income is None:
+                monthly_income.append(0)
+            else:
+                monthly_income.append(round(income, 2))
+
+        monthly_expenses = []
+
+        for month in dates:
+            expense = Expense.objects.all().filter(
+                user=user,
+                date__year=month.year,
+                date__month=month.month
+            ).aggregate(
+                amount_sum=(Sum('amount'))
+            )['amount_sum']
+            if expense is None:
+                monthly_expenses.append(0)
+            else:
+                monthly_expenses.append(round(expense, 2))
+
+        balance = []
+
+        for i in range(len(monthly_income)):
+            result = monthly_income[i] - monthly_expenses[i]
+            balance.append(result)
 
         context = {
-            'user': user,
             'dates': dates,
             'in_categories': in_categories,
             'ex_categories': ex_categories,
+            'monthly_income': monthly_income,
+            'monthly_expenses': monthly_expenses,
+            'in_result': in_result,
+            'total_income_value': total_income_value,
+            'balance': balance,
         }
         return render(
             request,
