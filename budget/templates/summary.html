@@ -2,18 +2,43 @@
 {% block content %}
     <div class="card mb-3">
         <div class="card-body">
-            <table class="table table-bordered table-hover">
-                <thead class="thead-light">
+            <table class="table table-bordered table-hover table-responsive">
+                <thead class="thead-light table-sm">
                     <tr>
                         <th>Category</th>
+                        {% for month in dates %}
+                        <th style="min-width: 80px; text-align: right">{{ month|date:"m-Y" }}</th>
+                        {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
-                {% for cat in categories %}
+                {% for in_cat in in_categories %}
                     <tr>
-                        <th>{{ cat }}</th>
+                        <th>{{ in_cat }}</th>
                     </tr>
                 {% endfor %}
+                </tbody>
+                <tbody class="thead-light">
+                    <tr>
+                        <th>in_sum</th>
+                    </tr>
+                </tbody>
+                <tbody>
+                {% for ex_cat in ex_categories %}
+                    <tr>
+                        <th>{{ ex_cat }}</th>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                 <tbody class="thead-light">
+                    <tr>
+                        <th>ex_sum</th>
+                    </tr>
+                </tbody>
+                 <tbody class="thead-secondary">
+                    <tr>
+                        <th>Balance</th>
+                    </tr>
                 </tbody>
             </table>
         </div>

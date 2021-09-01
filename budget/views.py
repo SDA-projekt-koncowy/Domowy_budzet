@@ -1,8 +1,12 @@
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views import View
 
 from django.views.generic import (
@@ -232,11 +236,26 @@ class Summary(LoginRequiredMixin, View):
 
     def get(self, request):
         user = User.objects.get(pk=request.user.id)
-        categories = Category.objects.all().filter(user=user)
+        in_categories = Category.objects.all().filter(user=user, category='IN')
+        ex_categories = Category.objects.all().filter(user=user, category='EX')
+
+        dates = [
+                    datetime(
+                        timezone.now().year,
+                        timezone.now().month,
+                        1,
+                    ).date() - relativedelta(
+                        months=i
+                    ) for i in range(12)
+                ][::-1]
+
+
 
         context = {
             'user': user,
-            'categories': categories,
+            'dates': dates,
+            'in_categories': in_categories,
+            'ex_categories': ex_categories,
         }
         return render(
             request,
