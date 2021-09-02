@@ -3,8 +3,13 @@ from django.db import models
 
 
 class Category(models.Model):
+    CHOICES = (
+        ('IN', 'Income'),
+        ('EX', 'Expense'),
+    )
     name = models.CharField(max_length=128)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    category = models.CharField(max_length=128, choices=CHOICES, null=True)
 
     def __str__(self):
         return f"{self.name}"

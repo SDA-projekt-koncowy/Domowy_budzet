@@ -21,4 +21,5 @@ urlpatterns = [
     path('category-update-view/<pk>/', views.CategoryUpdateView.as_view(), name="category-update-view"),
     path('category-delete-view/<pk>/', views.CategoryDeleteView.as_view(), name="category-delete-view"),
     path('category-detail-view/<pk>/', views.CategoryDetailView.as_view(), name="category-detail-view"),
+    path('summary', views.Summary.as_view(), name="summary"),
 ]
