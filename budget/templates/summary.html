@@ -12,13 +12,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for in_cat in in_categories %}
+                 {% for key, value in in_result.items %}
                     <tr>
-                        <th>{{ in_cat }}</th>
+                        <th>{{ key }}</th>
+                            {% for i in value %}
+                        <td style="text-align: right">{{ i }}</td>
+                            {% endfor %}
                     </tr>
-                {% endfor %}
+                 {% endfor %}
                 </tbody>
-                <tbody class="thead-light">
+                <tbody class="thead-light table-sm">
                     <tr>
                         <th>&Sigma; Income</th>
                         {% for month in monthly_income %}
@@ -27,15 +30,18 @@
                     </tr>
                 </tbody>
                 <tbody>
-                {% for ex_cat in ex_categories %}
+                {% for key, value in ex_result.items %}
                     <tr>
-                        <th>{{ ex_cat }}</th>
+                        <th>{{ key }}</th>
+                            {% for i in value %}
+                        <td style="text-align: right">{{ i }}</td>
+                            {% endfor %}
                     </tr>
-                {% endfor %}
+                 {% endfor %}
                 </tbody>
-                 <tbody class="thead-light">
+                 <tbody class="thead-light table-sm">
                     <tr>
-                        <th>&Sigma; Expense</th>
+                        <th >&Sigma; Expense</th>
                         {% for month in monthly_expenses %}
                              <td style="text-align: right">{{ month }}</td>
                         {% endfor %}
@@ -53,5 +59,14 @@
                 </tbody>
             </table>
         </div>
+
+    </div>
+    <div class="card-body">
+        Total budget balance :
+         {% if account_balance < 0 %}
+            <a style="color: red">{{ account_balance }}</a>
+         {% else %}
+            <a style="color: green">{{ account_balance }}</a>
+         {% endif %}
     </div>
 {% endblock %}

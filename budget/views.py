@@ -242,11 +242,17 @@ class Summary(LoginRequiredMixin, View):
 
         total_income_value = Income.objects.filter(
             user=user,
-            date__year=2021,
-            date__month=9
         ).aggregate(
             amount_sum=(Sum('amount')
             ))['amount_sum']
+
+        total_expense_value = Expense.objects.filter(
+            user=user,
+        ).aggregate(
+            amount_sum=(Sum('amount')
+                        ))['amount_sum']
+
+        account_balance = round((total_income_value - total_expense_value), 2)
 
         dates = [
                     datetime(
@@ -255,13 +261,32 @@ class Summary(LoginRequiredMixin, View):
                         1,
                     ).date() - relativedelta(
                         months=i
-                    ) for i in range(6)
+                    ) for i in range(10)
                 ][::-1]
 
-        in_result = []
+        in_result = {}
 
-        for category in enumerate(in_categories):
-            in_result.append([])
+        for category in in_categories:
+            month_res = []
+            for month in dates:
+                monthly_amount = Income.objects.filter(
+                    user=request.user,
+                    category__name=category,
+                    date__year=month.year,
+                    date__month=month.month,
+                ).aggregate(
+                    amount_sum=Sum('amount'),
+                    )['amount_sum']
+                if monthly_amount is None:
+                    month_res.append(0)
+                else:
+                    month_res.append(round(monthly_amount, 2))
+            in_result[category] = month_res
+
+        ex_result = {}
+
+        for category in ex_categories:
+            month_res = []
             for month in dates:
                 monthly_amount = Expense.objects.filter(
                     user=request.user,
@@ -270,8 +295,12 @@ class Summary(LoginRequiredMixin, View):
                     date__month=month.month,
                 ).aggregate(
                     amount_sum=Sum('amount'),
-                    )['amount_sum']
-                in_result.append(monthly_amount)
+                )['amount_sum']
+                if monthly_amount is None:
+                    month_res.append(0)
+                else:
+                    month_res.append(round(monthly_amount, 2))
+            ex_result[category] = month_res
 
         monthly_income = []
 
@@ -316,8 +345,9 @@ class Summary(LoginRequiredMixin, View):
             'monthly_income': monthly_income,
             'monthly_expenses': monthly_expenses,
             'in_result': in_result,
-            'total_income_value': total_income_value,
+            'ex_result': ex_result,
             'balance': balance,
+            'account_balance': account_balance,
         }
         return render(
             request,
