@@ -1,11 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
-    {% for obj in object_list %}
-        <li> <a  href="{% url 'expense-detail-view' pk=obj.pk %}"> {{obj}} </a>
-            <a class="btn btn-outline-secondary btn-sm" href="{% url 'expense-update-view' pk=obj.pk %}">  UPDATE </a>
-            <a class="btn btn-outline-secondary btn-sm" href="{% url 'expense-delete-view' pk=obj.pk %}">  DELETE </a>
-        </li>
-    {% endfor %}
-<p></p>
-        <a class="btn btn-outline-secondary btn-sm" href="{% url 'expense-create-view' %}"> ADD </a>
+<a class="btn btn-outline-secondary btn-sm" href="{% url 'expense-create-view' %}"> ADD EXPENSE</a>
+        <div class="card mb-3">
+                <div class="card-body">
+                    <table class="table table-bordered table-hover table-responsive">
+                        <thead class="thead-light table-sm">
+                            <tr>
+                                <th>Data</th>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Update</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for obj in object_list %}
+                            <tr>
+                                <td>{{ obj.date|date:"Y-m-d" }}</td>
+                                <td>{{ obj.category }}</td>
+                                <td>{{ obj.amount }}</td>
+                                <td>
+                                    <a class="btn btn-outline-secondary btn-sm"
+                                       href="{% url 'expense-update-view' pk=obj.pk %}">
+                                        UPDATE
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-outline-secondary btn-sm"
+                                       href="{% url 'expense-delete-view' pk=obj.pk %}">  DELETE </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+        </div>
 {% endblock %}
