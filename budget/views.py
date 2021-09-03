@@ -22,6 +22,7 @@ from budget.models import Category, Expense, Income
 
 User = get_user_model()
 
+
 def copyright(request):
     return render(
         request,
@@ -67,6 +68,11 @@ class IncomeCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("income-list-view")
     form_class = IncomeForm
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -78,12 +84,17 @@ class IncomeUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("income-list-view")
     form_class = IncomeForm
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
     def render_to_response(self, context, **response_kwargs):
         if self.request.user == context['income'].user:
             return super().render_to_response(context)
         else:
             return HttpResponse('404')
-    
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -126,6 +137,11 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("expense-list-view")
     form_class = ExpenseForm
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -136,6 +152,11 @@ class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "form.html"
     success_url = reverse_lazy("expense-list-view")
     form_class = ExpenseForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.user == context['expense'].user:
@@ -244,7 +265,7 @@ class Summary(LoginRequiredMixin, View):
             user=user,
         ).aggregate(
             amount_sum=(Sum('amount')
-            ))['amount_sum']
+                        ))['amount_sum']
 
         total_expense_value = Expense.objects.filter(
             user=user,
@@ -276,7 +297,7 @@ class Summary(LoginRequiredMixin, View):
                     date__month=month.month,
                 ).aggregate(
                     amount_sum=Sum('amount'),
-                    )['amount_sum']
+                )['amount_sum']
                 if monthly_amount is None:
                     month_res.append(0)
                 else:
