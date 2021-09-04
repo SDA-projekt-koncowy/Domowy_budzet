@@ -1,11 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
-    {% for obj in object_list %}
-        <li> <a  href="{% url 'category-detail-view' pk=obj.pk %}"> {{obj.category}}: {{obj}} </a>
-            <a class="btn btn-outline-secondary btn-sm" href="{% url 'category-update-view' pk=obj.pk %}">  UPDATE </a>
-            <a class="btn btn-outline-secondary btn-sm" href="{% url 'category-delete-view' pk=obj.pk %}">  DELETE </a>
-        </li>
-    {% endfor %}
-<p></p>
-        <a class="btn btn-outline-secondary btn-sm" href="{% url 'category-create-view' %}"> ADD </a>
+<a class="btn btn-outline-secondary btn-sm " href="{% url 'category-create-view' %}"> ADD CATEGORY </a>
+        <div class="card mb-3">
+                <div class="card-body">
+                    <table class="table table-bordered table-hover table-responsive">
+                        <thead class="thead-light table-sm">
+                            <tr>
+                                <th>Category</th>
+                                <th>Name</th>
+                                <th>Update</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for obj in object_list %}
+                            <tr>
+                                <td>{{ obj.category }}</td>
+                                <td>{{ obj.name }}</td>
+                                <td>
+                                    <a class="btn btn-outline-secondary btn-sm"
+                                       href="{% url 'category-update-view' pk=obj.pk %}">
+                                            UPDATE
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-outline-secondary btn-sm"
+                                       href="{% url 'category-delete-view' pk=obj.pk %}">
+                                            DELETE
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+        </div>
 {% endblock %}
