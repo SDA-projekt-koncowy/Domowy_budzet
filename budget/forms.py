@@ -22,10 +22,11 @@ class IncomeForm(LoginRequiredMixin, forms.ModelForm):
 
     amount = forms.DecimalField(max_digits=10, decimal_places=2, validators=[negative_value_validator])
     description = forms.CharField(max_length=128, required=False)
+    date = forms.DateField
 
     class Meta:
         model = Income
-        fields = ("amount", "description", "category")
+        fields = ("amount", "description", "category", "date")
 
 
 class ExpenseForm(LoginRequiredMixin, forms.ModelForm):
@@ -36,10 +37,11 @@ class ExpenseForm(LoginRequiredMixin, forms.ModelForm):
 
     amount = forms.DecimalField(max_digits=10, decimal_places=2, validators=[negative_value_validator])
     description = forms.CharField(max_length=128, required=False)
+    date = forms.DateField
 
     class Meta:
         model = Expense
-        fields = ("amount", "description", "category")
+        fields = ("amount", "description", "category", "date")
 
 
 class CategoryForm(LoginRequiredMixin, forms.ModelForm):
