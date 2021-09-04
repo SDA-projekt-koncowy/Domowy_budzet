@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from budget.views import IncomeCreateView, IncomeDeleteView, IncomeDetailView, IncomeListView, IncomeUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     {% for obj in object_list %}
-        <li> <a  href="{% url 'category-detail-view' pk=obj.pk %}"> {{obj}} </a>
+        <li> <a  href="{% url 'category-detail-view' pk=obj.pk %}"> {{obj.category}}: {{obj}} </a>
             <a class="btn btn-outline-secondary btn-sm" href="{% url 'category-update-view' pk=obj.pk %}">  UPDATE </a>
             <a class="btn btn-outline-secondary btn-sm" href="{% url 'category-delete-view' pk=obj.pk %}">  DELETE </a>
         </li>

@@ -2,5 +2,6 @@
 {% block content %}
 <p>Category: {{ category.name }}</p>
 <p>User: {{ category.user }}</p>
+<p>Category: {{ category.category }}</p>
 <a class="btn btn-outline-secondary btn-sm" href="{% url 'category-list-view' %}"> GO BACK TO THE INCOME LIST </a>
 {% endblock %}
