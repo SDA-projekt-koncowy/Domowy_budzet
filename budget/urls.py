@@ -22,4 +22,7 @@ urlpatterns = [
     path('category-delete-view/<pk>/', views.CategoryDeleteView.as_view(), name="category-delete-view"),
     path('category-detail-view/<pk>/', views.CategoryDetailView.as_view(), name="category-detail-view"),
     path('summary', views.Summary.as_view(), name="summary"),
+    path('balance/', views.Balance.as_view(), name='balance'),
+    path('balance-list/', views.BalanceList.as_view(), name='balance-list'),
+    path('balance-mix/', views.BalanceMix.as_view(), name='balance-mix')
 ]
