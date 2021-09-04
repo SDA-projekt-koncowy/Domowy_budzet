@@ -22,6 +22,7 @@ from budget.models import Category, Expense, Income
 
 User = get_user_model()
 
+
 def copyright(request):
     return render(
         request,
@@ -58,7 +59,7 @@ class IncomeListView(LoginRequiredMixin, ListView):
     model = Income
 
     def get_queryset(self):
-        return Income.objects.filter(user=self.request.user)
+        return self.request.user.income_set.all()
 
 
 class IncomeCreateView(LoginRequiredMixin, CreateView):
@@ -66,6 +67,11 @@ class IncomeCreateView(LoginRequiredMixin, CreateView):
     template_name = "form.html"
     success_url = reverse_lazy("income-list-view")
     form_class = IncomeForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -78,12 +84,17 @@ class IncomeUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("income-list-view")
     form_class = IncomeForm
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
     def render_to_response(self, context, **response_kwargs):
         if self.request.user == context['income'].user:
             return super().render_to_response(context)
         else:
             return HttpResponse('404')
-    
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -117,7 +128,7 @@ class ExpenseListView(LoginRequiredMixin, ListView):
     model = Expense
 
     def get_queryset(self):
-        return Expense.objects.filter(user=self.request.user)
+        return self.request.user.expense_set.all()
 
 
 class ExpenseCreateView(LoginRequiredMixin, CreateView):
@@ -125,6 +136,11 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
     template_name = "form.html"
     success_url = reverse_lazy("expense-list-view")
     form_class = ExpenseForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -136,6 +152,11 @@ class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "form.html"
     success_url = reverse_lazy("expense-list-view")
     form_class = ExpenseForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.user == context['expense'].user:
@@ -176,7 +197,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
 
     def get_queryset(self):
-        return Category.objects.filter(user=self.request.user)
+        return self.request.user.category_set.all()
 
 
 class CategoryCreateView(LoginRequiredMixin, CreateView):
@@ -190,7 +211,7 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_queryset(self):
-        return Category.objects.filter(user=self.request.user)
+        return self.request.user.category_set.all()
 
 
 class CategoryUpdateView(LoginRequiredMixin, UpdateView):
@@ -244,7 +265,7 @@ class Summary(LoginRequiredMixin, View):
             user=user,
         ).aggregate(
             amount_sum=(Sum('amount')
-            ))['amount_sum']
+                        ))['amount_sum']
 
         total_expense_value = Expense.objects.filter(
             user=user,
@@ -276,7 +297,7 @@ class Summary(LoginRequiredMixin, View):
                     date__month=month.month,
                 ).aggregate(
                     amount_sum=Sum('amount'),
-                    )['amount_sum']
+                )['amount_sum']
                 if monthly_amount is None:
                     month_res.append(0)
                 else:
