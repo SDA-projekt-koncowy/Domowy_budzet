@@ -59,7 +59,7 @@ class IncomeListView(LoginRequiredMixin, ListView):
     model = Income
 
     def get_queryset(self):
-        return Income.objects.filter(user=self.request.user)
+        return self.request.user.income_set.all()
 
 
 class IncomeCreateView(LoginRequiredMixin, CreateView):
@@ -128,7 +128,7 @@ class ExpenseListView(LoginRequiredMixin, ListView):
     model = Expense
 
     def get_queryset(self):
-        return Expense.objects.filter(user=self.request.user)
+        return self.request.user.expense_set.all()
 
 
 class ExpenseCreateView(LoginRequiredMixin, CreateView):
@@ -197,7 +197,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
 
     def get_queryset(self):
-        return Category.objects.filter(user=self.request.user)
+        return self.request.user.category_set.all()
 
 
 class CategoryCreateView(LoginRequiredMixin, CreateView):
@@ -211,7 +211,7 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_queryset(self):
-        return Category.objects.filter(user=self.request.user)
+        return self.request.user.category_set.all()
 
 
 class CategoryUpdateView(LoginRequiredMixin, UpdateView):
