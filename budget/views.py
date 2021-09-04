@@ -293,10 +293,11 @@ class Summary(LoginRequiredMixin, View):
                         1,
                     ).date() - relativedelta(
                         months=i
-                    ) for i in range(10)
+                    ) for i in range(6)
                 ][::-1]
 
         in_result = {}
+
 
         for category in in_categories:
             month_res = []
@@ -313,6 +314,8 @@ class Summary(LoginRequiredMixin, View):
                     month_res.append(0)
                 else:
                     month_res.append(round(monthly_amount, 2))
+            month_sum = sum(month_res)
+            month_res.append(month_sum)
             in_result[category] = month_res
 
         ex_result = {}
@@ -332,6 +335,8 @@ class Summary(LoginRequiredMixin, View):
                     month_res.append(0)
                 else:
                     month_res.append(round(monthly_amount, 2))
+            month_sum = sum(month_res)
+            month_res.append(month_sum)
             ex_result[category] = month_res
 
         monthly_income = []
@@ -348,6 +353,7 @@ class Summary(LoginRequiredMixin, View):
                 monthly_income.append(0)
             else:
                 monthly_income.append(round(income, 2))
+        monthly_sum_income = sum(monthly_income)
 
         monthly_expenses = []
 
@@ -363,23 +369,28 @@ class Summary(LoginRequiredMixin, View):
                 monthly_expenses.append(0)
             else:
                 monthly_expenses.append(round(expense, 2))
-
+        monthly_sum_expenses = sum(monthly_expenses)
         balance = []
 
         for i in range(len(monthly_income)):
             result = monthly_income[i] - monthly_expenses[i]
             balance.append(result)
+        balance_sum = sum(balance)
 
         context = {
             'dates': dates,
             'in_categories': in_categories,
             'ex_categories': ex_categories,
             'monthly_income': monthly_income,
+            'monthly_sum_income': monthly_sum_income,
             'monthly_expenses': monthly_expenses,
+            'monthly_sum_expenses': monthly_sum_expenses,
             'in_result': in_result,
             'ex_result': ex_result,
             'balance': balance,
+            'balance_sum': balance_sum,
             'account_balance': account_balance,
+
         }
         return render(
             request,
