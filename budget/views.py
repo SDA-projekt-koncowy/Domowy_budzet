@@ -261,6 +261,7 @@ class Summary(LoginRequiredMixin, View):
         in_categories = Category.objects.all().filter(user=user, category='IN')
         ex_categories = Category.objects.all().filter(user=user, category='EX')
 
+
         total_income_value = Income.objects.filter(
             user=user,
         ).aggregate(
@@ -275,6 +276,13 @@ class Summary(LoginRequiredMixin, View):
 
         account_balance = round((total_income_value - total_expense_value), 2)
 
+        period = {
+            "Month": 1,
+            "Quarter": 3,
+            "Half a year": 6,
+            "Year": 12,
+        }
+        
         dates = [
                     datetime(
                         timezone.now().year,
@@ -282,11 +290,10 @@ class Summary(LoginRequiredMixin, View):
                         1,
                     ).date() - relativedelta(
                         months=i
-                    ) for i in range(6)
+                    ) for i in range(12)
                 ][::-1]
 
         in_result = {}
-
 
         for category in in_categories:
             month_res = []
@@ -367,6 +374,7 @@ class Summary(LoginRequiredMixin, View):
         balance_sum = sum(balance)
 
         context = {
+            'period': period,
             'dates': dates,
             'in_categories': in_categories,
             'ex_categories': ex_categories,
