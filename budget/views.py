@@ -60,7 +60,7 @@ class IncomeListView(LoginRequiredMixin, ListView):
     model = Income
 
     def get_queryset(self):
-        return Income.objects.filter(user=self.request.user)
+        return self.request.user.income_set.all()
 
 
 class IncomeCreateView(LoginRequiredMixin, CreateView):
@@ -129,7 +129,7 @@ class ExpenseListView(LoginRequiredMixin, ListView):
     model = Expense
 
     def get_queryset(self):
-        return Expense.objects.filter(user=self.request.user)
+        return self.request.user.expense_set.all()
 
 
 class ExpenseCreateView(LoginRequiredMixin, CreateView):
@@ -198,7 +198,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
 
     def get_queryset(self):
-        return Category.objects.filter(user=self.request.user)
+        return self.request.user.category_set.all()
 
 
 class CategoryCreateView(LoginRequiredMixin, CreateView):
@@ -212,7 +212,7 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_queryset(self):
-        return Category.objects.filter(user=self.request.user)
+        return self.request.user.category_set.all()
 
 
 class CategoryUpdateView(LoginRequiredMixin, UpdateView):
@@ -258,22 +258,22 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
 class Summary(LoginRequiredMixin, View):
 
     def get(self, request):
+
+        in_categories = request.user.category_set.filter(category='IN')
+        ex_categories = request.user.category_set.filter(category='EX')
+
         user = User.objects.get(pk=request.user.id)
-        in_categories = Category.objects.all().filter(user=user, category='IN')
-        ex_categories = Category.objects.all().filter(user=user, category='EX')
 
-        total_income_value = Income.objects.filter(
-            user=user,
-        ).aggregate(
-            amount_sum=(Sum('amount')
-                        ))['amount_sum']
+        total_income_value = request.user.income_set.all().aggregate(amount_sum=(Sum('amount')
+                                                                                 ))['amount_sum']
 
-        total_expense_value = Expense.objects.filter(
-            user=user,
-        ).aggregate(
-            amount_sum=(Sum('amount')
-                        ))['amount_sum']
+        total_expense_value = request.user.expense_set.all().aggregate(amount_sum=(Sum('amount')
+                                                                                   ))['amount_sum']
 
+        if total_expense_value is None:
+            total_expense_value = 0
+        if total_income_value is None:
+            total_income_value = 0
         account_balance = round((total_income_value - total_expense_value), 2)
 
         dates = [
@@ -283,10 +283,11 @@ class Summary(LoginRequiredMixin, View):
                         1,
                     ).date() - relativedelta(
                         months=i
-                    ) for i in range(10)
+                    ) for i in range(6)
                 ][::-1]
 
         in_result = {}
+
 
         for category in in_categories:
             month_res = []
@@ -303,6 +304,8 @@ class Summary(LoginRequiredMixin, View):
                     month_res.append(0)
                 else:
                     month_res.append(round(monthly_amount, 2))
+            month_sum = sum(month_res)
+            month_res.append(month_sum)
             in_result[category] = month_res
 
         ex_result = {}
@@ -322,6 +325,8 @@ class Summary(LoginRequiredMixin, View):
                     month_res.append(0)
                 else:
                     month_res.append(round(monthly_amount, 2))
+            month_sum = sum(month_res)
+            month_res.append(month_sum)
             ex_result[category] = month_res
 
         monthly_income = []
@@ -338,6 +343,7 @@ class Summary(LoginRequiredMixin, View):
                 monthly_income.append(0)
             else:
                 monthly_income.append(round(income, 2))
+        monthly_sum_income = sum(monthly_income)
 
         monthly_expenses = []
 
@@ -353,23 +359,28 @@ class Summary(LoginRequiredMixin, View):
                 monthly_expenses.append(0)
             else:
                 monthly_expenses.append(round(expense, 2))
-
+        monthly_sum_expenses = sum(monthly_expenses)
         balance = []
 
         for i in range(len(monthly_income)):
             result = monthly_income[i] - monthly_expenses[i]
             balance.append(result)
+        balance_sum = sum(balance)
 
         context = {
             'dates': dates,
             'in_categories': in_categories,
             'ex_categories': ex_categories,
             'monthly_income': monthly_income,
+            'monthly_sum_income': monthly_sum_income,
             'monthly_expenses': monthly_expenses,
+            'monthly_sum_expenses': monthly_sum_expenses,
             'in_result': in_result,
             'ex_result': ex_result,
             'balance': balance,
+            'balance_sum': balance_sum,
             'account_balance': account_balance,
+
         }
         return render(
             request,

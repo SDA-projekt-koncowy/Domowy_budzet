@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
+    <div class="form-group">
+      <label for="sel1">Select list:</label>
+      <select class="form-control" id="sel1">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+      </select>
+    </div>
     <div class="card mb-3">
         <div class="card-body">
             <table class="table table-bordered table-hover table-responsive">
@@ -9,15 +18,17 @@
                         {% for month in dates %}
                         <th style="min-width: 80px; text-align: right">{{ month|date:"m-Y" }}</th>
                         {% endfor %}
+                        <th>&Sigma;</th>
                     </tr>
                 </thead>
                 <tbody>
                  {% for key, value in in_result.items %}
                     <tr>
                         <th>{{ key }}</th>
-                            {% for i in value %}
+                            {% for i in value|slice:":-1" %}
                         <td style="text-align: right">{{ i }}</td>
                             {% endfor %}
+                        <th>{{ value|last }}</th>
                     </tr>
                  {% endfor %}
                 </tbody>
@@ -27,15 +38,17 @@
                         {% for month in monthly_income %}
                              <th style="text-align: right">{{ month }}</th>
                         {% endfor %}
+                            <th>{{ monthly_sum_income }}</th>
                     </tr>
                 </tbody>
                 <tbody>
                 {% for key, value in ex_result.items %}
                     <tr>
                         <th>{{ key }}</th>
-                            {% for i in value %}
+                            {% for i in value|slice:":-1" %}
                         <td style="text-align: right">{{ i }}</td>
                             {% endfor %}
+                        <th>{{ value|last }}</th>
                     </tr>
                  {% endfor %}
                 </tbody>
@@ -45,6 +58,7 @@
                         {% for month in monthly_expenses %}
                              <th style="text-align: right">{{ month }}</th>
                         {% endfor %}
+                            <th>{{ monthly_sum_expenses }}</th>
                     </tr>
                 </tbody>
                  <tbody class="thead-secondary">
@@ -56,6 +70,11 @@
                     <td style="color: green; text-align: right">{{ b }}</td>
                             {% endif %}
                         {% endfor %}
+                        {% if b < 0 %}
+                            <td style="color: red; text-align: right">{{ balance_sum }}</td>
+                        {% else %}
+                            <td style="color: green; text-align: right">{{ balance_sum }}</td>
+                        {% endif %}
                 </tbody>
             </table>
         </div>
