@@ -257,23 +257,22 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
 class Summary(LoginRequiredMixin, View):
 
     def get(self, request):
+
+        in_categories = request.user.category_set.filter(category='IN')
+        ex_categories = request.user.category_set.filter(category='EX')
+
         user = User.objects.get(pk=request.user.id)
-        in_categories = Category.objects.all().filter(user=user, category='IN')
-        ex_categories = Category.objects.all().filter(user=user, category='EX')
 
+        total_income_value = request.user.income_set.all().aggregate(amount_sum=(Sum('amount')
+                                                                                 ))['amount_sum']
 
-        total_income_value = Income.objects.filter(
-            user=user,
-        ).aggregate(
-            amount_sum=(Sum('amount')
-                        ))['amount_sum']
+        total_expense_value = request.user.expense_set.all().aggregate(amount_sum=(Sum('amount')
+                                                                                   ))['amount_sum']
 
-        total_expense_value = Expense.objects.filter(
-            user=user,
-        ).aggregate(
-            amount_sum=(Sum('amount')
-                        ))['amount_sum']
-
+        if total_expense_value is None:
+            total_expense_value = 0
+        if total_income_value is None:
+            total_income_value = 0
         account_balance = round((total_income_value - total_expense_value), 2)
 
         period = {
@@ -282,7 +281,7 @@ class Summary(LoginRequiredMixin, View):
             "Half a year": 6,
             "Year": 12,
         }
-        
+
         dates = [
                     datetime(
                         timezone.now().year,
@@ -290,7 +289,7 @@ class Summary(LoginRequiredMixin, View):
                         1,
                     ).date() - relativedelta(
                         months=i
-                    ) for i in range(12)
+                    ) for i in range(6)
                 ][::-1]
 
         in_result = {}
