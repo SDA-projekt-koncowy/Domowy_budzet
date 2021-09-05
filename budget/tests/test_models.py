@@ -24,7 +24,7 @@ class CategoryModelTest(TestCase):
         max_length = self.category._meta.get_field('name').max_length
         self.assertEqual(max_length, 128)
 
-    def test_object_name_is_simply_name(self):
+    def test_str_method_returns_category_name(self):
         expected_object_name = f"{self.category.name}"
         self.assertEqual(str(self.category), expected_object_name)
 
