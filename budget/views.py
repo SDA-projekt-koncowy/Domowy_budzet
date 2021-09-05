@@ -17,7 +17,7 @@ from django.views.generic import (
     UpdateView
 )
 
-from budget.filters import UserFilterIncome, UserFilterExpense, IncomeFilter, ExpenseFilter
+#from budget.filters import UserFilterIncome, UserFilterExpense, IncomeFilter, ExpenseFilter
 from budget.forms import CategoryForm, ExpenseForm, IncomeForm
 from budget.models import Category, Expense, Income
 
@@ -388,46 +388,3 @@ class Summary(LoginRequiredMixin, View):
             context=context,
         )
 
-
-class Balance(LoginRequiredMixin, View):
-
-    def get(self, request):
-        return render(
-            request,
-            template_name='balance.html',
-            context={'user_incomes': request.user.incomes.all(),
-                     'user_expenses': request.user.expenses.all(),
-                     'income_sum': request.user.incomes.aggregate(Sum('amount')),
-                     'expense_sum': request.user.expenses.aggregate(Sum('amount')),
-                     'filter1': UserFilterIncome(request.GET, queryset=request.user.incomes.all()),
-                     'filter2': UserFilterExpense(request.GET, queryset=request.user.expenses.all())}
-        )
-
-
-class BalanceList(View):
-    def get(self, request):
-        return render(
-            request,
-            template_name='balance-list.html',
-            context={'incomes': Income.objects.select_related('user').filter(user=request.user),
-                     'expenses': Expense.objects.select_related('user').filter(user=request.user),
-                     'income_sum': Income.objects.aggregate(Sum('amount')),
-                     'expense_sum': Expense.objects.aggregate(Sum('amount')),
-                     'filter1': IncomeFilter(request.GET, queryset=request.user.incomes.all()),
-                     'filter2': ExpenseFilter(request.GET, queryset=request.user.expenses.all())}
-        )
-
-
-class BalanceMix(LoginRequiredMixin, View):
-
-    def get(self, request):
-        return render(
-            request,
-            template_name='balance-list.html',
-            context={'user_incomes': request.user.incomes.all(),
-                     'user_expenses': request.user.expenses.all(),
-                     'income_sum': request.user.incomes.aggregate(Sum('amount')),
-                     'expense_sum': request.user.expenses.aggregate(Sum('amount')),
-                     'filter1': IncomeFilter(request.GET, queryset=request.user.incomes.all()),
-                     'filter2': ExpenseFilter(request.GET, queryset=request.user.expenses.all())}
-        )
