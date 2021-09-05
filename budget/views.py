@@ -17,7 +17,7 @@ from django.views.generic import (
     UpdateView
 )
 
-from budget.filters import UserFilterIncome, UserFilterExpense, IncomeFilter, ExpenseFilter
+#from budget.filters import UserFilterIncome, UserFilterExpense, IncomeFilter, ExpenseFilter
 from budget.forms import CategoryForm, ExpenseForm, IncomeForm
 from budget.models import Category, Expense, Income
 
@@ -60,7 +60,7 @@ class IncomeListView(LoginRequiredMixin, ListView):
     model = Income
 
     def get_queryset(self):
-        return self.request.user.income_set.all()
+        return self.request.user.incomes.all()
 
 
 class IncomeCreateView(LoginRequiredMixin, CreateView):
@@ -129,7 +129,7 @@ class ExpenseListView(LoginRequiredMixin, ListView):
     model = Expense
 
     def get_queryset(self):
-        return self.request.user.expense_set.all()
+        return self.request.user.expenses.all()
 
 
 class ExpenseCreateView(LoginRequiredMixin, CreateView):
@@ -264,10 +264,10 @@ class Summary(LoginRequiredMixin, View):
 
         user = User.objects.get(pk=request.user.id)
 
-        total_income_value = request.user.income_set.all().aggregate(amount_sum=(Sum('amount')
+        total_income_value = request.user.incomes.all().aggregate(amount_sum=(Sum('amount')
                                                                                  ))['amount_sum']
 
-        total_expense_value = request.user.expense_set.all().aggregate(amount_sum=(Sum('amount')
+        total_expense_value = request.user.expenses.all().aggregate(amount_sum=(Sum('amount')
                                                                                    ))['amount_sum']
 
         if total_expense_value is None:
@@ -388,46 +388,3 @@ class Summary(LoginRequiredMixin, View):
             context=context,
         )
 
-
-class Balance(LoginRequiredMixin, View):
-
-    def get(self, request):
-        return render(
-            request,
-            template_name='balance.html',
-            context={'user_incomes': request.user.incomes.all(),
-                     'user_expenses': request.user.expenses.all(),
-                     'income_sum': request.user.incomes.aggregate(Sum('amount')),
-                     'expense_sum': request.user.expenses.aggregate(Sum('amount')),
-                     'filter1': UserFilterIncome(request.GET, queryset=request.user.incomes.all()),
-                     'filter2': UserFilterExpense(request.GET, queryset=request.user.expenses.all())}
-        )
-
-
-class BalanceList(View):
-    def get(self, request):
-        return render(
-            request,
-            template_name='balance-list.html',
-            context={'incomes': Income.objects.select_related('user').filter(user=request.user),
-                     'expenses': Expense.objects.select_related('user').filter(user=request.user),
-                     'income_sum': Income.objects.aggregate(Sum('amount')),
-                     'expense_sum': Expense.objects.aggregate(Sum('amount')),
-                     'filter1': IncomeFilter(request.GET, queryset=request.user.incomes.all()),
-                     'filter2': ExpenseFilter(request.GET, queryset=request.user.expenses.all())}
-        )
-
-
-class BalanceMix(LoginRequiredMixin, View):
-
-    def get(self, request):
-        return render(
-            request,
-            template_name='balance-list.html',
-            context={'user_incomes': request.user.incomes.all(),
-                     'user_expenses': request.user.expenses.all(),
-                     'income_sum': request.user.incomes.aggregate(Sum('amount')),
-                     'expense_sum': request.user.expenses.aggregate(Sum('amount')),
-                     'filter1': IncomeFilter(request.GET, queryset=request.user.incomes.all()),
-                     'filter2': ExpenseFilter(request.GET, queryset=request.user.expenses.all())}
-        )
