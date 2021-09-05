@@ -60,7 +60,7 @@ class IncomeListView(LoginRequiredMixin, ListView):
     model = Income
 
     def get_queryset(self):
-        return self.request.user.income_set.all()
+        return self.request.user.incomes.all()
 
 
 class IncomeCreateView(LoginRequiredMixin, CreateView):
@@ -129,7 +129,7 @@ class ExpenseListView(LoginRequiredMixin, ListView):
     model = Expense
 
     def get_queryset(self):
-        return self.request.user.expense_set.all()
+        return self.request.user.expenses.all()
 
 
 class ExpenseCreateView(LoginRequiredMixin, CreateView):
@@ -264,10 +264,10 @@ class Summary(LoginRequiredMixin, View):
 
         user = User.objects.get(pk=request.user.id)
 
-        total_income_value = request.user.income_set.all().aggregate(amount_sum=(Sum('amount')
+        total_income_value = request.user.incomes.all().aggregate(amount_sum=(Sum('amount')
                                                                                  ))['amount_sum']
 
-        total_expense_value = request.user.expense_set.all().aggregate(amount_sum=(Sum('amount')
+        total_expense_value = request.user.expenses.all().aggregate(amount_sum=(Sum('amount')
                                                                                    ))['amount_sum']
 
         if total_expense_value is None:
