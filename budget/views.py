@@ -258,10 +258,9 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
 class Summary(LoginRequiredMixin, View):
 
     def get(self, request):
-
+        budget_period = 12
         in_categories = request.user.category_set.filter(category='IN')
         ex_categories = request.user.category_set.filter(category='EX')
-
         user = User.objects.get(pk=request.user.id)
 
         total_income_value = request.user.incomes.all().aggregate(amount_sum=(Sum('amount')
@@ -283,7 +282,7 @@ class Summary(LoginRequiredMixin, View):
                         1,
                     ).date() - relativedelta(
                         months=i
-                    ) for i in range(6)
+                    ) for i in range(budget_period)
                 ][::-1]
 
         in_result = {}
